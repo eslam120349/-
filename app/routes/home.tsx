@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDarkMode } from "../hooks/useDarkMode";
