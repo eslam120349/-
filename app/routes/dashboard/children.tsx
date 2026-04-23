@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useDarkMode } from "../../hooks/useDarkMode";
+import {
+  FaChild, FaTimes, FaChartLine, FaBook, FaCalendarAlt, FaStar,
+  FaChalkboardTeacher, FaClipboardList, FaArrowLeft, FaUserPlus,
+  FaUsers, FaPlus, FaExclamationTriangle, FaCheck, FaGraduationCap
+} from "react-icons/fa";
 
 // ─── Theme ────────────────────────────────────────────────────────────────────
 // Navy    : #0f1c2e
@@ -149,9 +154,11 @@ function AddChildModal({
             className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center rounded transition-colors"
             style={{ color: "rgba(255,255,255,0.7)", background: "rgba(0,0,0,0.2)" }}
           >
-            ✕
+            <FaTimes />
           </button>
-          <div className="text-3xl mb-2">👦</div>
+          <div className="text-3xl mb-2">
+            <FaChild />
+          </div>
           <h2 className="text-xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>
             إضافة ابن جديد
           </h2>
@@ -173,7 +180,7 @@ function AddChildModal({
                 fontFamily: "sans-serif",
               }}
             >
-              ⚠️ {error}
+              <FaExclamationTriangle className="inline-block ml-1" /> {error}
             </p>
           )}
 
@@ -248,7 +255,7 @@ function AddChildModal({
               className="flex-1 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
               style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
             >
-              إضافة ✓
+              إضافة <FaCheck className="inline-block mr-1" />
             </button>
           </div>
         </div>
@@ -291,7 +298,7 @@ function ChildPanel({
               className="w-8 h-8 flex items-center justify-center rounded transition-colors"
               style={{ background: "rgba(0,0,0,0.2)", color: "rgba(255,255,255,0.7)" }}
             >
-              ✕
+              <FaTimes />
             </button>
             <button
               onClick={() => onDelete(child.id)}
@@ -354,29 +361,32 @@ function ChildPanel({
             <>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { l: "نسبة الحضور", v: `${child.attendance}%`, icon: "📊" },
-                  { l: "حصص منعقدة", v: child.sessions, icon: "📚" },
-                  { l: "حصص قادمة", v: child.upcoming, icon: "📅" },
-                  { l: "متوسط الدرجات", v: child.gpa ? `${child.gpa}%` : "—", icon: "⭐" },
-                ].map((s, i) => (
-                  <div
-                    key={i}
-                    className="p-4"
-                    style={{
-                      background: isDark ? "rgba(255,255,255,0.03)" : "#f5f4f2",
-                      border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}`,
-                      borderRadius: "2px",
-                    }}
-                  >
-                    <div className="text-xl mb-1">{s.icon}</div>
-                    <div className="text-xl font-extrabold" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>
-                      {s.v}
+                  { l: "نسبة الحضور", v: `${child.attendance}%`, icon: FaChartLine },
+                  { l: "حصص منعقدة", v: child.sessions, icon: FaBook },
+                  { l: "حصص قادمة", v: child.upcoming, icon: FaCalendarAlt },
+                  { l: "متوسط الدرجات", v: child.gpa ? `${child.gpa}%` : "—", icon: FaStar },
+                ].map((s, i) => {
+                  const Icon = s.icon;
+                  return (
+                    <div
+                      key={i}
+                      className="p-4"
+                      style={{
+                        background: isDark ? "rgba(255,255,255,0.03)" : "#f5f4f2",
+                        border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}`,
+                        borderRadius: "2px",
+                      }}
+                    >
+                      <div className="text-xl mb-1"><Icon /></div>
+                      <div className="text-xl font-extrabold" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>
+                        {s.v}
+                      </div>
+                      <div className="text-xs mt-0.5" style={{ color: isDark ? "rgba(255,255,255,0.35)" : "#888", fontFamily: "sans-serif" }}>
+                        {s.l}
+                      </div>
                     </div>
-                    <div className="text-xs mt-0.5" style={{ color: isDark ? "rgba(255,255,255,0.35)" : "#888", fontFamily: "sans-serif" }}>
-                      {s.l}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {child.attendance > 0 && (
@@ -407,7 +417,7 @@ function ChildPanel({
             <div className="space-y-3">
               {child.teachers.length === 0 ? (
                 <div className="text-center py-12" style={{ color: isDark ? "rgba(255,255,255,0.2)" : "#aaa" }}>
-                  <div className="text-3xl mb-2">👨‍🏫</div>
+                  <div className="text-3xl mb-2"><FaChalkboardTeacher /></div>
                   <p className="text-sm" style={{ fontFamily: "sans-serif" }}>
                     لا يوجد مدرسين مسجلين
                   </p>
@@ -438,7 +448,7 @@ function ChildPanel({
                       </p>
                     </div>
                     <div className="text-xs font-bold" style={{ color: "#c9a84c" }}>
-                      ★ {t.rating}
+                      <FaStar className="inline-block ml-1" /> {t.rating}
                     </div>
                   </div>
                 ))
@@ -447,7 +457,7 @@ function ChildPanel({
                 className="w-full py-3 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
                 style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
               >
-                + إضافة مدرس
+                <FaUserPlus className="inline-block ml-1" /> إضافة مدرس
               </button>
             </div>
           )}
@@ -457,7 +467,7 @@ function ChildPanel({
             <div className="space-y-3">
               {child.recentGrades.length === 0 ? (
                 <div className="text-center py-12" style={{ color: isDark ? "rgba(255,255,255,0.2)" : "#aaa" }}>
-                  <div className="text-3xl mb-2">📝</div>
+                  <div className="text-3xl mb-2"><FaClipboardList /></div>
                   <p className="text-sm" style={{ fontFamily: "sans-serif" }}>
                     لا يوجد درجات مسجلة
                   </p>
@@ -579,6 +589,12 @@ export default function ChildrenPage() {
     if (supabase) await supabase.from("children").delete().eq("id", id);
   };
 
+  const totalSessions = children.reduce((a, c) => a + c.sessions, 0);
+  const avgAttendance = children.length
+    ? Math.round(children.reduce((a, c) => a + c.attendance, 0) / children.length)
+    : 0;
+  const totalUpcoming = children.reduce((a, c) => a + c.upcoming, 0);
+
   return (
     <div
       className="min-h-screen transition-colors duration-300"
@@ -652,7 +668,7 @@ export default function ChildrenPage() {
             className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
             style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
           >
-            + إضافة ابن جديد
+            <FaUserPlus /> إضافة ابن جديد
           </button>
         </div>
       </div>
@@ -662,28 +678,31 @@ export default function ChildrenPage() {
         {!loading && children.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4" style={{ border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` }}>
             {[
-              { l: "عدد الأبناء", v: children.length, icon: "👨‍👧‍👦" },
-              { l: "إجمالي الحصص", v: children.reduce((a, c) => a + c.sessions, 0), icon: "📚" },
-              { l: "متوسط الحضور", v: `${Math.round(children.reduce((a, c) => a + c.attendance, 0) / children.length) || 0}%`, icon: "📊" },
-              { l: "حصص قادمة", v: children.reduce((a, c) => a + c.upcoming, 0), icon: "📅" },
-            ].map((s, i) => (
-              <div
-                key={i}
-                className="py-8 px-4 text-center"
-                style={{
-                  background: isDark ? "rgba(255,255,255,0.02)" : "#faf9f7",
-                  borderRight: i < 3 ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
-                }}
-              >
-                <div className="text-2xl mb-1">{s.icon}</div>
-                <div className="text-3xl font-extrabold mb-0.5" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>
-                  {s.v}
+              { l: "عدد الأبناء", v: children.length, icon: FaUsers },
+              { l: "إجمالي الحصص", v: totalSessions, icon: FaBook },
+              { l: "متوسط الحضور", v: `${avgAttendance}%`, icon: FaChartLine },
+              { l: "حصص قادمة", v: totalUpcoming, icon: FaCalendarAlt },
+            ].map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={i}
+                  className="py-8 px-4 text-center"
+                  style={{
+                    background: isDark ? "rgba(255,255,255,0.02)" : "#faf9f7",
+                    borderRight: i < 3 ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
+                  }}
+                >
+                  <div className="text-2xl mb-1"><Icon /></div>
+                  <div className="text-3xl font-extrabold mb-0.5" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>
+                    {s.v}
+                  </div>
+                  <div className="text-xs" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>
+                    {s.l}
+                  </div>
                 </div>
-                <div className="text-xs" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>
-                  {s.l}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
@@ -696,7 +715,7 @@ export default function ChildrenPage() {
           </div>
         ) : children.length === 0 ? (
           <div className="text-center py-24" style={{ border: `1px dashed ${isDark ? "rgba(139,26,46,0.35)" : "rgba(139,26,46,0.2)"}`, borderRadius: "2px" }}>
-            <div className="text-6xl mb-4">👨‍👧‍👦</div>
+            <div className="text-6xl mb-4"><FaUsers /></div>
             <h3 className="text-xl font-bold mb-2" style={{ color: isDark ? "#fff" : "#1a1a1a" }}>
               لا يوجد أبناء مسجلين
             </h3>
@@ -708,7 +727,7 @@ export default function ChildrenPage() {
               className="px-7 py-3 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
               style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
             >
-              أضف ابنك الأول 🚀
+              <FaUserPlus className="inline-block ml-1" /> أضف ابنك الأول
             </button>
           </div>
         ) : (
@@ -726,7 +745,6 @@ export default function ChildrenPage() {
                   boxShadow: isDark ? "0 2px 20px rgba(0,0,0,0.3)" : "0 2px 8px rgba(0,0,0,0.05)",
                 }}
               >
-                {/* Animated crimson line */}
                 <div className="mb-4 transition-all duration-500" style={{ height: 2, width: "3rem", background: "#8b1a2e", borderRadius: "2px" }} />
 
                 <div className="flex items-center gap-4 mb-4">
@@ -747,11 +765,11 @@ export default function ChildrenPage() {
                       className="text-xs px-2.5 py-0.5 mt-1 inline-block"
                       style={{ background: "rgba(139,26,46,0.2)", color: "#f0b8be", borderRadius: "2px", fontFamily: "sans-serif" }}
                     >
-                      {child.age} سنة
+                      <FaChild className="inline-block ml-1" /> {child.age} سنة
                     </span>
                   </div>
                   <span className="text-sm transition-colors" style={{ color: isDark ? "rgba(255,255,255,0.2)" : "#ccc" }}>
-                    ←
+                    <FaArrowLeft />
                   </span>
                 </div>
 
@@ -783,7 +801,7 @@ export default function ChildrenPage() {
                 {child.teachers.length > 0 && (
                   <div className="flex items-center gap-2 pt-4" style={{ borderTop: `1px solid ${isDark ? "rgba(255,255,255,0.06)" : "#e8e4de"}` }}>
                     <div className="flex">
-                      {child.teachers.map((t, i) => (
+                      {child.teachers.slice(0, 3).map((t, i) => (
                         <AvatarOrInitial
                           key={i}
                           src={t.image}
@@ -811,7 +829,7 @@ export default function ChildrenPage() {
                 className="w-12 h-12 flex items-center justify-center text-2xl"
                 style={{ background: isDark ? "rgba(139,26,46,0.1)" : "rgba(139,26,46,0.05)", border: `1px solid ${isDark ? "rgba(139,26,46,0.3)" : "rgba(139,26,46,0.2)"}`, borderRadius: "2px", color: "#8b1a2e" }}
               >
-                +
+                <FaPlus />
               </div>
               <p className="text-sm font-medium" style={{ color: isDark ? "rgba(255,255,255,0.35)" : "#888", fontFamily: "sans-serif" }}>
                 إضافة ابن جديد

@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useDarkMode } from "../../hooks/useDarkMode";
+import {
+  FaUsers, FaBook, FaChartLine, FaCalendarAlt, FaUserPlus, FaBell, FaArrowLeft,
+  FaCheck, FaTimes, FaChalkboardTeacher, FaCalendarWeek, FaClipboardList,
+  FaStar, FaRegClock, FaDollarSign, FaGraduationCap, FaUserCheck, FaUserTimes,
+  FaCommentDots, FaSearch, FaChild, FaSchool, FaClock, FaMoneyBillWave
+} from "react-icons/fa";
 
 // ─── Theme (matches ParentHome exactly) ──────────────────────────────────────
 // BG dark    : #0f1c2e  (navy)
@@ -139,7 +145,7 @@ function AvatarOrInitial({ src, name, className = "", style }: { src: string; na
   );
 }
 
-// ─── Add Child Modal (dynamic) ────────────────────────────────────────────────
+// ─── Add Child Modal ────────────────────────────────────────────────
 
 function AddChildModal({
   onClose,
@@ -181,16 +187,16 @@ function AddChildModal({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Crimson header (fixed) */}
+        {/* Crimson header */}
         <div className="px-8 pt-8 pb-6" style={{ background: "#8b1a2e" }}>
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded transition-colors"
             style={{ color: "rgba(255,255,255,0.7)", background: "rgba(0,0,0,0.2)" }}
           >
-            ✕
+            <FaTimes />
           </button>
-          <div className="text-3xl mb-2">👦</div>
+          <div className="text-3xl mb-2"><FaUserPlus /></div>
           <h2 className="text-xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>إضافة ابن جديد</h2>
           <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.65)", fontFamily: "sans-serif" }}>أدخل بيانات ابنك لمتابعة حصصه</p>
         </div>
@@ -260,7 +266,7 @@ function AddChildModal({
               className="flex-1 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
               style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
             >
-              إضافة ✓
+              إضافة <FaCheck className="inline-block mr-1" />
             </button>
           </div>
         </div>
@@ -269,7 +275,7 @@ function AddChildModal({
   );
 }
 
-// ─── Child Detail View (dynamic) ──────────────────────────────────────────────
+// ─── Child Detail View ──────────────────────────────────────────────
 
 function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () => void; isDark: boolean }) {
   const [tab, setTab] = useState("schedule");
@@ -288,7 +294,7 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
             borderRadius: "2px",
           }}
         >
-          ←
+          <FaArrowLeft />
         </button>
         <div className="flex items-center gap-4">
           <AvatarOrInitial
@@ -307,28 +313,35 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
       {/* Stats strip */}
       <div className="grid grid-cols-3 gap-0" style={{ border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` }}>
         {[
-          { label: "نسبة الحضور", value: `${child.attendance}%`, icon: "📊" },
-          { label: "حصص منعقدة", value: child.sessions, icon: "📚" },
-          { label: "حصص قادمة", value: child.upcoming, icon: "📅" },
-        ].map((s, i) => (
-          <div
-            key={i}
-            className="py-6 px-4 text-center"
-            style={{
-              borderRight: i < 2 ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
-              background: isDark ? "rgba(255,255,255,0.02)" : "#faf9f7",
-            }}
-          >
-            <div className="text-2xl mb-1">{s.icon}</div>
-            <div className="text-2xl font-extrabold mb-0.5" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>{s.value}</div>
-            <div className="text-xs" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>{s.label}</div>
-          </div>
-        ))}
+          { label: "نسبة الحضور", value: `${child.attendance}%`, icon: FaChartLine },
+          { label: "حصص منعقدة", value: child.sessions, icon: FaBook },
+          { label: "حصص قادمة", value: child.upcoming, icon: FaCalendarAlt },
+        ].map((s, i) => {
+          const Icon = s.icon;
+          return (
+            <div
+              key={i}
+              className="py-6 px-4 text-center"
+              style={{
+                borderRight: i < 2 ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
+                background: isDark ? "rgba(255,255,255,0.02)" : "#faf9f7",
+              }}
+            >
+              <div className="text-2xl mb-1"><Icon /></div>
+              <div className="text-2xl font-extrabold mb-0.5" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>{s.value}</div>
+              <div className="text-xs" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>{s.label}</div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Tabs */}
       <div className="flex gap-0" style={{ border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}`, borderRadius: "2px" }}>
-        {[["schedule","الجدول الأسبوعي","📅"],["sessions","سجل الحصص","📋"],["teachers","المدرسين","👨‍🏫"]].map(([id, label, icon]) => (
+        {[
+          ["schedule", "الجدول الأسبوعي", FaCalendarWeek],
+          ["sessions", "سجل الحصص", FaClipboardList],
+          ["teachers", "المدرسين", FaChalkboardTeacher],
+        ].map(([id, label, Icon]) => (
           <button
             key={id}
             onClick={() => setTab(id)}
@@ -340,7 +353,7 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
               borderRight: id !== "teachers" ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
             }}
           >
-            <span>{icon}</span> {label}
+            <Icon /> {label}
           </button>
         ))}
       </div>
@@ -351,7 +364,7 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
           <SectionLabel text="الجدول الأسبوعي" onDark={isDark} />
           {child.schedule.length === 0 ? (
             <div className="text-center py-16" style={{ color: isDark ? "rgba(255,255,255,0.25)" : "#aaa" }}>
-              <div className="text-4xl mb-3">📅</div>
+              <div className="text-4xl mb-3"><FaCalendarWeek /></div>
               <p style={{ fontFamily: "sans-serif" }}>لا يوجد حصص مجدولة حتى الآن</p>
             </div>
           ) : child.schedule.map((s, i) => (
@@ -395,7 +408,7 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
           <SectionLabel text="سجل الحصص الأخيرة" onDark={isDark} />
           {child.recentSessions.length === 0 ? (
             <div className="text-center py-16" style={{ color: isDark ? "rgba(255,255,255,0.25)" : "#aaa" }}>
-              <div className="text-4xl mb-3">📋</div>
+              <div className="text-4xl mb-3"><FaClipboardList /></div>
               <p style={{ fontFamily: "sans-serif" }}>لا يوجد سجل حصص بعد</p>
             </div>
           ) : child.recentSessions.map((s, i) => (
@@ -417,12 +430,12 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
                   borderRadius: "2px",
                 }}
               >
-                {s.attended ? "✅" : "❌"}
+                {s.attended ? <FaCheck className="text-green-500" /> : <FaTimes className="text-red-500" />}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold" style={{ color: isDark ? "#fff" : "#1a1a1a" }}>{s.subject}</div>
                 <div className="text-xs" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>{s.teacher} · {s.date}</div>
-                {s.note && <div className="text-xs mt-0.5" style={{ color: "#c9a84c", fontFamily: "sans-serif" }}>💬 {s.note}</div>}
+                {s.note && <div className="text-xs mt-0.5" style={{ color: "#c9a84c", fontFamily: "sans-serif" }}><FaCommentDots className="inline-block ml-1" /> {s.note}</div>}
               </div>
               <span
                 className="text-xs font-medium px-2.5 py-1 flex-shrink-0"
@@ -446,7 +459,7 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
           <SectionLabel text="المدرسين المسجلين" onDark={isDark} />
           {child.teachers.length === 0 ? (
             <div className="text-center py-16" style={{ color: isDark ? "rgba(255,255,255,0.25)" : "#aaa" }}>
-              <div className="text-4xl mb-3">👨‍🏫</div>
+              <div className="text-4xl mb-3"><FaChalkboardTeacher /></div>
               <p style={{ fontFamily: "sans-serif" }}>لا يوجد مدرسين مسجلين</p>
             </div>
           ) : child.teachers.map((t, i) => (
@@ -476,7 +489,7 @@ function ChildDetail({ child, onBack, isDark }: { child: ChildItem; onBack: () =
             className="w-full py-3 font-semibold text-sm text-white transition-all duration-200 hover:opacity-90"
             style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
           >
-            + إضافة مدرس جديد
+            <FaUserPlus className="inline-block ml-1" /> إضافة مدرس جديد
           </button>
         </div>
       )}
@@ -637,12 +650,12 @@ export default function ParentDashboard() {
               </div>
               {parentName ? (
                 <h1 className="text-3xl font-extrabold" style={{ color: isDark ? "#fff" : "#1a1a1a" }}>
-                  أهلاً، {parentName} 👋
+                  أهلاً، {parentName} <FaUserCheck className="inline-block" />
                 </h1>
               ) : (
                 <div className="flex items-center gap-3">
                   <SkeletonBlock className="w-44 h-8" isDark={isDark} />
-                  <span className="text-3xl">👋</span>
+                  <FaUserCheck className="text-3xl" />
                 </div>
               )}
               <p className="text-sm mt-1" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "#666", fontFamily: "sans-serif" }}>
@@ -660,7 +673,7 @@ export default function ParentDashboard() {
                   color: isDark ? "rgba(255,255,255,0.6)" : "#666",
                 }}
               >
-                🔔
+                <FaBell />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: "#8b1a2e" }} />
               </button>
               <AvatarOrInitial
@@ -683,26 +696,29 @@ export default function ParentDashboard() {
               style={{ border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` }}
             >
               {[
-                { label: "عدد الأبناء", value: children.length, icon: "👨‍👧‍👦" },
-                { label: "إجمالي الحصص", value: totalSessions, icon: "📚" },
-                { label: "متوسط الحضور", value: `${avgAttendance}%`, icon: "📊" },
-                { label: "حصص قادمة", value: totalUpcoming, icon: "📅" },
-              ].map((s, i) => (
-                <div
-                  key={i}
-                  className="py-10 px-4 text-center"
-                  style={{
-                    background: isDark ? "rgba(255,255,255,0.02)" : "#faf9f7",
-                    borderRight: i < 3 ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
-                  }}
-                >
-                  <div className="text-2xl mb-2">{s.icon}</div>
-                  <div className="text-4xl font-extrabold mb-1" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>
-                    {s.value}
+                { label: "عدد الأبناء", value: children.length, icon: FaUsers },
+                { label: "إجمالي الحصص", value: totalSessions, icon: FaBook },
+                { label: "متوسط الحضور", value: `${avgAttendance}%`, icon: FaChartLine },
+                { label: "حصص قادمة", value: totalUpcoming, icon: FaCalendarAlt },
+              ].map((s, i) => {
+                const Icon = s.icon;
+                return (
+                  <div
+                    key={i}
+                    className="py-10 px-4 text-center"
+                    style={{
+                      background: isDark ? "rgba(255,255,255,0.02)" : "#faf9f7",
+                      borderRight: i < 3 ? `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}` : "none",
+                    }}
+                  >
+                    <div className="text-2xl mb-2"><Icon /></div>
+                    <div className="text-4xl font-extrabold mb-1" style={{ color: "#c9a84c", fontFamily: "Georgia, serif" }}>
+                      {s.value}
+                    </div>
+                    <div className="text-sm" style={{ color: isDark ? "rgba(255,255,255,0.45)" : "#888", fontFamily: "sans-serif" }}>{s.label}</div>
                   </div>
-                  <div className="text-sm" style={{ color: isDark ? "rgba(255,255,255,0.45)" : "#888", fontFamily: "sans-serif" }}>{s.label}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -718,7 +734,7 @@ export default function ParentDashboard() {
                 className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
                 style={{ background: "#8b1a2e", borderRadius: "2px", fontFamily: "sans-serif" }}
               >
-                + إضافة ابن
+                <FaUserPlus /> إضافة ابن
               </button>
             </div>
 
@@ -729,7 +745,7 @@ export default function ParentDashboard() {
                 className="text-center py-16"
                 style={{ border: `1px dashed ${isDark ? "rgba(139,26,46,0.4)" : "rgba(139,26,46,0.2)"}`, borderRadius: "2px" }}
               >
-                <div className="text-5xl mb-4">👨‍👧‍👦</div>
+                <div className="text-5xl mb-4"><FaUsers /></div>
                 <p className="mb-4" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>لم تسجل أي أبناء بعد</p>
                 <button
                   onClick={() => setShowAddModal(true)}
@@ -768,10 +784,12 @@ export default function ParentDashboard() {
                             className="text-xs font-semibold px-2.5 py-0.5"
                             style={{ background: "rgba(139,26,46,0.3)", color: "#f0b8be", borderRadius: "2px", fontFamily: "sans-serif" }}
                           >
-                            {child.age} سنة
+                            <FaChild className="inline-block ml-1" /> {child.age} سنة
                           </span>
                         </div>
-                        <p className="text-xs mb-3" style={{ color: "#8b1a2e", fontFamily: "sans-serif", fontWeight: 500 }}>{child.grade}</p>
+                        <p className="text-xs mb-3" style={{ color: "#8b1a2e", fontFamily: "sans-serif", fontWeight: 500 }}>
+                          <FaGraduationCap className="inline-block ml-1" /> {child.grade}
+                        </p>
 
                         <div className="grid grid-cols-3 gap-2">
                           {[
@@ -809,8 +827,12 @@ export default function ParentDashboard() {
                             />
                           ))}
                         </div>
-                        <span className="text-xs mr-1" style={{ color: isDark ? "rgba(255,255,255,0.35)" : "#888", fontFamily: "sans-serif" }}>{child.teachers.length} مدرس</span>
-                        <span className="mr-auto text-xs" style={{ color: "#8b1a2e", fontFamily: "sans-serif" }}>عرض التفاصيل ←</span>
+                        <span className="text-xs mr-1" style={{ color: isDark ? "rgba(255,255,255,0.35)" : "#888", fontFamily: "sans-serif" }}>
+                          {child.teachers.length} مدرس
+                        </span>
+                        <span className="mr-auto text-xs" style={{ color: "#8b1a2e", fontFamily: "sans-serif" }}>
+                          عرض التفاصيل <FaArrowLeft className="inline-block mr-1" />
+                        </span>
                       </div>
                     )}
                   </div>
@@ -827,7 +849,6 @@ export default function ParentDashboard() {
               borderRadius: "2px",
             }}
           >
-            {/* Crimson header strip */}
             <div className="px-6 py-5" style={{ background: "#8b1a2e", borderBottom: "none" }}>
               <SectionLabel text="الأسبوع الحالي" onDark />
               <h2 className="text-xl font-bold text-white">نظرة عامة على الجدول</h2>
@@ -935,7 +956,8 @@ export default function ParentDashboard() {
                       fontFamily: "sans-serif",
                     }}
                   >
-                    {s.attended ? "✓ حضر" : "✗ غياب"}
+                    {s.attended ? <FaCheck className="inline-block ml-1" /> : <FaTimes className="inline-block ml-1" />}
+                    {s.attended ? "حضر" : "غياب"}
                   </span>
                 </div>
               ))}

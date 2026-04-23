@@ -2,6 +2,31 @@ import { useState, useMemo, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useDarkMode } from "../hooks/useDarkMode";
 
+// استيراد أيقونات Font Awesome
+import {
+  FaThLarge,           // الكل
+  FaCalculator,        // رياضيات
+  FaAtom,              // فيزياء
+  FaFlask,             // كيمياء
+  FaDna,               // أحياء
+  FaBook,              // إنجليزي
+  FaPenFancy,          // عربي
+  FaSearch,            // بحث
+  FaTimes,             // إزالة النص
+  FaExclamationTriangle, // تحذير
+  FaComment,           // تواصل
+  FaFilter,            // فلتر
+  FaSort,              // ترتيب
+  FaStar,              // نجمة (للـ StarRating يمكن استخدام FaStar لكننا سنبقي SVG)
+  FaUserCheck,         // متاح (للأيقونة)
+  FaClock,             // للحضور
+  FaGraduationCap,     // المدرسة
+  FaChalkboardTeacher, // مدرس
+  FaUsers,             // طلاب
+  FaCalendarAlt,       // جدول
+  FaMoneyBillWave,     // سعر
+} from "react-icons/fa";
+
 // ─── Theme ────────────────────────────────────────────────────────────────────
 // Navy      : #0f1c2e
 // Crimson   : #8b1a2e
@@ -12,13 +37,13 @@ import { useDarkMode } from "../hooks/useDarkMode";
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const subjects = [
-  { name: "الكل",        icon: "✨", ar: "الكل" },
-  { name: "Mathematics", icon: "📐", ar: "رياضيات" },
-  { name: "Physics",     icon: "⚛️", ar: "فيزياء" },
-  { name: "Chemistry",   icon: "🧪", ar: "كيمياء" },
-  { name: "Biology",     icon: "🧬", ar: "أحياء" },
-  { name: "English",     icon: "📖", ar: "إنجليزي" },
-  { name: "Arabic",      icon: "✍️", ar: "عربي" },
+  { name: "الكل",        icon: FaThLarge,       ar: "الكل" },
+  { name: "Mathematics", icon: FaCalculator,    ar: "رياضيات" },
+  { name: "Physics",     icon: FaAtom,          ar: "فيزياء" },
+  { name: "Chemistry",   icon: FaFlask,         ar: "كيمياء" },
+  { name: "Biology",     icon: FaDna,           ar: "أحياء" },
+  { name: "English",     icon: FaBook,          ar: "إنجليزي" },
+  { name: "Arabic",      icon: FaPenFancy,      ar: "عربي" },
 ];
 
 type Teacher = {
@@ -222,7 +247,7 @@ function TeacherModal({
             className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded transition-colors"
             style={{ color: "rgba(255,255,255,0.7)", background: "rgba(0,0,0,0.2)" }}
           >
-            ✕
+            <FaTimes />
           </button>
 
           <div className="flex items-start gap-5">
@@ -388,7 +413,8 @@ function TeacherModal({
                     fontFamily: "sans-serif",
                   }}
                 >
-                  ⚠️ لا يوجد أطفال مسجلين في حسابك
+                  <FaExclamationTriangle className="inline-block ml-1" />
+                  لا يوجد أطفال مسجلين في حسابك
                 </div>
               ) : (
                 <div className="space-y-1">
@@ -432,7 +458,8 @@ function TeacherModal({
                     fontFamily: "sans-serif",
                   }}
                 >
-                  ⚠️ {bookingError}
+                  <FaExclamationTriangle className="inline-block ml-1" />
+                  {bookingError}
                 </p>
               )}
 
@@ -830,7 +857,7 @@ export default function TeachersPage() {
             {/* Search */}
             <div className="relative">
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-lg" style={{ color: isDark ? "rgba(255,255,255,0.3)" : "#aaa" }}>
-                🔍
+                <FaSearch />
               </span>
               <input
                 value={search}
@@ -853,7 +880,7 @@ export default function TeachersPage() {
                   className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors hover:opacity-80"
                   style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#aaa" }}
                 >
-                  ✕
+                  <FaTimes />
                 </button>
               )}
             </div>
@@ -861,23 +888,26 @@ export default function TeachersPage() {
             {/* Subject pills + controls */}
             <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
               <div className="flex flex-wrap gap-2 flex-1">
-                {subjects.map((sub) => (
-                  <button
-                    key={sub.name}
-                    onClick={() => setActiveSubject(sub.ar)}
-                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5"
-                    style={{
-                      borderRadius: "2px",
-                      fontFamily: "sans-serif",
-                      border: activeSubject === sub.ar ? "1px solid #8b1a2e" : `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "#d0ccc4"}`,
-                      background: activeSubject === sub.ar ? "#8b1a2e" : isDark ? "rgba(255,255,255,0.04)" : "#ffffff",
-                      color: activeSubject === sub.ar ? "#fff" : isDark ? "rgba(255,255,255,0.45)" : "#555",
-                    }}
-                  >
-                    <span>{sub.icon}</span>
-                    {sub.ar}
-                  </button>
-                ))}
+                {subjects.map((sub) => {
+                  const Icon = sub.icon;
+                  return (
+                    <button
+                      key={sub.name}
+                      onClick={() => setActiveSubject(sub.ar)}
+                      className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium transition-all duration-200 hover:-translate-y-0.5"
+                      style={{
+                        borderRadius: "2px",
+                        fontFamily: "sans-serif",
+                        border: activeSubject === sub.ar ? "1px solid #8b1a2e" : `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "#d0ccc4"}`,
+                        background: activeSubject === sub.ar ? "#8b1a2e" : isDark ? "rgba(255,255,255,0.04)" : "#ffffff",
+                        color: activeSubject === sub.ar ? "#fff" : isDark ? "rgba(255,255,255,0.45)" : "#555",
+                      }}
+                    >
+                      <Icon style={{ fontSize: "0.9rem" }} />
+                      {sub.ar}
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="flex items-center gap-3 flex-shrink-0">
@@ -961,7 +991,9 @@ export default function TeachersPage() {
               className="text-center py-24"
               style={{ border: `1px dashed ${isDark ? "rgba(139,26,46,0.3)" : "rgba(139,26,46,0.2)"}`, borderRadius: "2px" }}
             >
-              <div className="text-5xl mb-4">⚠️</div>
+              <div className="text-5xl mb-4">
+                <FaExclamationTriangle />
+              </div>
               <p className="mb-2" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>
                 خطأ أثناء تحميل المدرّسين
               </p>
@@ -974,7 +1006,9 @@ export default function TeachersPage() {
               className="text-center py-24"
               style={{ border: `1px dashed ${isDark ? "rgba(255,255,255,0.08)" : "#e8e4de"}`, borderRadius: "2px" }}
             >
-              <div className="text-5xl mb-4">🔍</div>
+              <div className="text-5xl mb-4">
+                <FaSearch />
+              </div>
               <p className="mb-2" style={{ color: isDark ? "rgba(255,255,255,0.4)" : "#888", fontFamily: "sans-serif" }}>
                 لا يوجد مدرسين بهذه المواصفات
               </p>
@@ -1007,7 +1041,8 @@ export default function TeachersPage() {
               className="px-8 py-3 font-semibold text-sm text-white transition-all duration-200 hover:opacity-90"
               style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "2px", fontFamily: "sans-serif" }}
             >
-              تواصل معنا 💬
+              <FaComment className="inline-block ml-1" />
+              تواصل معنا
             </button>
           </div>
         </div>
