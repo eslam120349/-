@@ -3,14 +3,28 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useDarkMode } from "../hooks/useDarkMode";
 
+// استيراد أيقونات Font Awesome (الموجودة والمضمونة)
+import { 
+  FaTh,                // ⊞   (الرئيسية)
+  FaChalkboardTeacher, // 👨‍🏫 (المدرسين)
+  FaChild,             // 👦   (أبناؤي)     ← تم التغيير من FaChildren
+  FaCalendarAlt,       // 📅   (الجدول)
+  FaEnvelope,          // 💬   (الرسائل)
+  FaCog,               // ⚙️   (الإعدادات)
+  FaSun,               // ☀️
+  FaMoon,              // 🌙
+  FaBell,              // 🔔
+  FaSignOutAlt         // تسجيل الخروج
+} from "react-icons/fa";
+
 // ─── Nav Items ─────────────────────────────────────────
 const navItems = [
-  { to: "/dashboard/parent",   icon: "⊞",  label: "الرئيسية"  },
-  { to: "/Teachers",           icon: "👨‍🏫", label: "المدرسين"  },
-  { to: "/dashboard/children", icon: "👦",  label: "أبناؤي"    },
-  { to: "/dashboard/schedule", icon: "📅",  label: "الجدول"    },
-  { to: "/dashboard/messages", icon: "💬",  label: "الرسائل", badge: 3 },
-  { to: "/dashboard/settings", icon: "⚙️",  label: "الإعدادات" },
+  { to: "/dashboard/parent",   icon: FaTh,      label: "الرئيسية"  },
+  { to: "/Teachers",           icon: FaChalkboardTeacher, label: "المدرسين"  },
+  { to: "/dashboard/children", icon: FaChild,   label: "أبناؤي"    },  // تم التغيير هنا
+  { to: "/dashboard/schedule", icon: FaCalendarAlt, label: "الجدول"    },
+  { to: "/dashboard/messages", icon: FaEnvelope, label: "الرسائل", badge: 3 },
+  { to: "/dashboard/settings", icon: FaCog,     label: "الإعدادات" },
 ];
 
 // ─── Helpers ─────────────────────────────────────────
@@ -129,7 +143,7 @@ export default function ParentNavbar() {
         {/* ── Desktop Nav Links ── */}
         <div className="hidden md:flex items-center gap-1 flex-1 justify-center">
           {authed ? (
-            navItems.map(({ to, icon, label, badge }) => {
+            navItems.map(({ to, icon: Icon, label, badge }) => {
               const isActive = location.pathname === to;
               return (
                 <Link
@@ -142,7 +156,7 @@ export default function ParentNavbar() {
                     fontFamily: "sans-serif",
                   }}
                 >
-                  <span>{icon}</span>
+                  <Icon style={{ fontSize: "1rem" }} />
                   <span>{label}</span>
                   {badge && (
                     <span
@@ -191,7 +205,7 @@ export default function ParentNavbar() {
             }}
             title={isDark ? "الوضع النهاري" : "الوضع الليلي"}
           >
-            {isDark ? "☀️" : "🌙"}
+            {isDark ? <FaSun /> : <FaMoon />}
           </button>
 
           {/* Notifications */}
@@ -203,7 +217,7 @@ export default function ParentNavbar() {
               background: isDark ? "rgba(255,255,255,0.03)" : "#ffffff",
             }}
           >
-            <span style={{ fontSize: "15px" }}>🔔</span>
+            <FaBell style={{ fontSize: "15px" }} />
           </button>
 
           {/* User / Loading */}
@@ -245,7 +259,7 @@ export default function ParentNavbar() {
                   if (supabase) await supabase.auth.signOut();
                   navigate("/login");
                 }}
-                className="px-3 py-1.5 text-sm transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
                 style={{
                   border: `1px solid ${isDark ? "rgba(255,255,255,0.2)" : "#e8e4de"}`,
                   borderRadius: "2px",
@@ -262,7 +276,8 @@ export default function ParentNavbar() {
                   e.currentTarget.style.borderColor = isDark ? "rgba(255,255,255,0.2)" : "#e8e4de";
                 }}
               >
-                تسجيل الخروج
+                <FaSignOutAlt />
+                <span>تسجيل الخروج</span>
               </button>
             </>
           ) : null}
@@ -304,12 +319,13 @@ export default function ParentNavbar() {
               fontFamily: "sans-serif",
             }}
           >
-            <span>{isDark ? "☀️" : "🌙"}</span>
+            <span>{isDark ? <FaSun /> : <FaMoon />}</span>
             <span>{isDark ? "الوضع النهاري" : "الوضع الليلي"}</span>
           </button>
 
           {authed && navItems.map((item) => {
             const isActive = location.pathname === item.to;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.to}
@@ -323,7 +339,7 @@ export default function ParentNavbar() {
                   fontFamily: "sans-serif",
                 }}
               >
-                <span>{item.icon}</span>
+                <Icon style={{ fontSize: "1rem" }} />
                 <span>{item.label}</span>
                 {item.badge && (
                   <span
@@ -344,7 +360,7 @@ export default function ParentNavbar() {
                 navigate("/login");
                 setMenuOpen(false);
               }}
-              className="w-full text-right px-3 py-2.5 text-sm transition-colors"
+              className="w-full flex items-center gap-2 text-right px-3 py-2.5 text-sm transition-colors"
               style={{
                 color: "#8b1a2e",
                 fontFamily: "sans-serif",
@@ -355,7 +371,8 @@ export default function ParentNavbar() {
                 paddingTop: "12px",
               }}
             >
-              تسجيل الخروج
+              <FaSignOutAlt />
+              <span>تسجيل الخروج</span>
             </button>
           )}
         </div>
