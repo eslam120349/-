@@ -2,6 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useDarkMode } from "../hooks/useDarkMode";
 
+// استيراد أيقونات Font Awesome 6 (مجانية ومضمونة)
+import { 
+  FaStar,          // لـ All
+  FaCalculator,    // لـ Mathematics
+  FaAtom,          // لـ Physics
+  FaFlask,         // لـ Chemistry
+  FaDna,           // لـ Biology
+  FaBook           // لـ English
+} from "react-icons/fa";
+
 // ─── Theme ────────────────────────────────────────────────────────────────────
 // Hero    : dark navy  #0f1c2e (داكن) / أبيض (فاتح)
 // White sections : #ffffff  text #1a1a1a
@@ -20,12 +30,12 @@ const stats = [
 ];
 
 const subjects = [
-  { name: "All", icon: "✨" },
-  { name: "Mathematics", icon: "📐" },
-  { name: "Physics", icon: "⚛️" },
-  { name: "Chemistry", icon: "🧪" },
-  { name: "Biology", icon: "🧬" },
-  { name: "English", icon: "📖" },
+  { name: "All", icon: FaStar },
+  { name: "Mathematics", icon: FaCalculator },
+  { name: "Physics", icon: FaAtom },
+  { name: "Chemistry", icon: FaFlask },
+  { name: "Biology", icon: FaDna },
+  { name: "English", icon: FaBook },
 ];
 
 const teachers = [
@@ -94,7 +104,6 @@ function TeacherModal({ teacher, onClose, isDark }: { teacher: Teacher; onClose:
         style={{ borderTop: "4px solid #8b1a2e", borderRadius: "2px" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded transition-colors"
@@ -103,7 +112,6 @@ function TeacherModal({ teacher, onClose, isDark }: { teacher: Teacher; onClose:
           ✕
         </button>
 
-        {/* Crimson header */}
         <div className="flex flex-col items-center text-center px-8 pt-10 pb-6" style={{ background: "#8b1a2e" }}>
           <div className="relative mb-3">
             <img
@@ -125,7 +133,6 @@ function TeacherModal({ teacher, onClose, isDark }: { teacher: Teacher; onClose:
           </span>
         </div>
 
-        {/* White body */}
         <div className="px-8 py-6" style={{ background: isDark ? "#1a2a40" : "#ffffff" }}>
           <div className="grid grid-cols-3 gap-3 mb-5">
             {[
@@ -194,9 +201,7 @@ export default function ParentHome() {
         <TeacherModal teacher={selectedTeacher} onClose={() => setSelectedTeacher(null)} isDark={isDark} />
       )}
 
-      {/* ═══════════════════════════════════════
-          HERO — dynamic dark/light
-      ═══════════════════════════════════════ */}
+      {/* HERO */}
       <section
         className="relative text-center px-6 pt-20 pb-24 overflow-hidden transition-all duration-300"
         style={{
@@ -230,7 +235,7 @@ export default function ParentHome() {
           المنصة الأولى للتعليم الخصوصي في مصر
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6" style={{ color: isDark ? "#fff" : "#1a1a1a" }}>
+        <h1 className="text-5xl md:text-7xl font-Georgia leading-tight mb-6" style={{ color: isDark ? "#fff" : "#1a1a1a" }}>
           Find the Best{" "}
           <span style={{ color: "#c9a84c" }}>Teacher</span>
           <br />
@@ -269,9 +274,7 @@ export default function ParentHome() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          STATS — dynamic background
-      ═══════════════════════════════════════ */}
+      {/* STATS */}
       <section
         className="grid grid-cols-2 md:grid-cols-4 transition-colors"
         style={{
@@ -297,9 +300,7 @@ export default function ParentHome() {
         ))}
       </section>
 
-      {/* ═══════════════════════════════════════
-          SUBJECTS — light gray / dark surface
-      ═══════════════════════════════════════ */}
+      {/* SUBJECTS — with Font Awesome 6 icons */}
       <section
         id="subjects"
         className="px-6 py-16 transition-colors"
@@ -311,30 +312,31 @@ export default function ParentHome() {
             <h2 className="text-3xl font-bold" style={{ color: isDark ? "#ffffff" : "#1a1a1a" }}>Browse by Subject</h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            {subjects.map((sub) => (
-              <button
-                key={sub.name}
-                onClick={() => setActiveSubject(sub.name)}
-                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200"
-                style={{
-                  borderRadius: "2px",
-                  fontFamily: "sans-serif",
-                  border: activeSubject === sub.name ? "1px solid #8b1a2e" : isDark ? "1px solid rgba(255,255,255,0.2)" : "1px solid #d0ccc4",
-                  background: activeSubject === sub.name ? "#8b1a2e" : isDark ? "#0f1c2e" : "#ffffff",
-                  color: activeSubject === sub.name ? "#fff" : isDark ? "#dddddd" : "#555555",
-                }}
-              >
-                <span>{sub.icon}</span>
-                {sub.name}
-              </button>
-            ))}
+            {subjects.map((sub) => {
+              const IconComponent = sub.icon;
+              return (
+                <button
+                  key={sub.name}
+                  onClick={() => setActiveSubject(sub.name)}
+                  className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200"
+                  style={{
+                    borderRadius: "2px",
+                    fontFamily: "sans-serif",
+                    border: activeSubject === sub.name ? "1px solid #8b1a2e" : isDark ? "1px solid rgba(255,255,255,0.2)" : "1px solid #d0ccc4",
+                    background: activeSubject === sub.name ? "#8b1a2e" : isDark ? "#0f1c2e" : "#ffffff",
+                    color: activeSubject === sub.name ? "#fff" : isDark ? "#dddddd" : "#555555",
+                  }}
+                >
+                  <IconComponent style={{ fontSize: "1.2rem" }} />
+                  {sub.name}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          TEACHERS — dynamic background
-      ═══════════════════════════════════════ */}
+      {/* TEACHERS */}
       <section
         id="teachers"
         className="px-6 py-16 transition-colors"
@@ -420,9 +422,7 @@ export default function ParentHome() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          HOW IT WORKS — crimson bg (fixed)
-      ═══════════════════════════════════════ */}
+      {/* HOW IT WORKS */}
       <section id="how-it-works" className="px-6 py-16" style={{ background: "#8b1a2e" }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -466,9 +466,7 @@ export default function ParentHome() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          TESTIMONIALS — dynamic background
-      ═══════════════════════════════════════ */}
+      {/* TESTIMONIALS */}
       <section
         id="testimonials"
         className="px-6 py-16 transition-colors"
@@ -516,9 +514,7 @@ export default function ParentHome() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          CTA — dark navy (fixed dark)
-      ═══════════════════════════════════════ */}
+      {/* CTA */}
       <section
         className="relative text-center px-8 py-20 overflow-hidden"
         style={{ background: "#0f1c2e" }}
